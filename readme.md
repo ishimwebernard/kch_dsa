@@ -1,4 +1,4 @@
-```markdown
+
 # Kigali Central Hospital Patient Management & Triage System (KCH-PMTS) - Phase 1
 
 ## Overview

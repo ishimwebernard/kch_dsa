@@ -56,7 +56,7 @@ bool pq_insert(PriorityQueue* pq, Patient patientRecord) {
 
 Patient extract_max(PriorityQueue* pq) {
     if (is_empty(pq)){
-        throw std::underflow_error("the array is emptu");
+        throw std::underflow_error("the array is empty");
     }
 
     Patient max = pq->patientHeap[0];

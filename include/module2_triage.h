@@ -3,6 +3,7 @@
 
 #include <string>
 #include <iostream>
+#include<stdexcept>
 
 constexpr int MAX_PATIENTS = 100;
 

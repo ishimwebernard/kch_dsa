@@ -26,7 +26,7 @@ inline int right_child(int i) { return 2 * i + 2; }
 // Priority Queue Core Operations
 void bubble_up(PriorityQueue* pq, int index);
 void bubble_down(PriorityQueue* pq, int index);
-bool pq_insert(PriorityQueue* pq, Patient patientRecord);
+void pq_insert(PriorityQueue* pq, Patient patientRecord);
 Patient extract_max(PriorityQueue* pq);
 Patient peek_max(const PriorityQueue* pq);
 bool is_empty(const PriorityQueue* pq);

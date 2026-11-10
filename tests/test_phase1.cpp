@@ -57,7 +57,8 @@ void test_module1_staff() {
 }
 
 void test_module2_triage() {
-    PriorityQueue pq;
+PriorityQueue pq;
+    pq.patientCount = 0; // Ensures clean initial state
 
     runTest(is_empty(&pq) == true, "triage queue initial empty check");
 
@@ -66,7 +67,9 @@ void test_module2_triage() {
     bool insertAllOk = true;
     for (int i = 0; i < 7; ++i) {
         Patient p{i + 1, acuities[i], "P" + std::to_string(i + 1)};
-        if (!pq_insert(&pq, p)) {
+        pq_insert(&pq, p); // Call void pq_insert function
+        
+        if (pq.patientCount != i + 1) {
             insertAllOk = false;
         }
     }

@@ -59,6 +59,7 @@ int main() {
     // --- Module 2: Emergency Room Triage Engine Demo ---
     std::cout << "\n>>> 2. EMERGENCY ROOM TRIAGE ENGINE DEMO <<<\n";
     PriorityQueue demoPQ;
+    demoPQ.patientCount = 0;
 
     int acuities[] = {14, 22, 45, 10, 8, 30, 95};
     int numPatients = 7;
@@ -86,6 +87,7 @@ int main() {
     Doctor doctorRoster[MAX_DOCTORS];
     int doctorCount = 0;
     PriorityQueue triageQueue;
+    triageQueue.patientCount = 0;
 
     int choice = 0;
     while (choice != 10) {
@@ -174,7 +176,10 @@ int main() {
                 std::cout << "Enter Patient Name: ";
                 std::cin >> name;
                 Patient p{pid, acuity, name};
-                if (pq_insert(&triageQueue, p)) {
+                if (is_full(&triageQueue)) {
+                    std::cout << "Triage queue is full. Cannot insert patient.\n";
+                } else {
+                    pq_insert(&triageQueue, p);
                     std::cout << "Patient added to triage Max-Heap.\n";
                 }
                 break;

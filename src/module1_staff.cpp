@@ -99,9 +99,11 @@ bool addNurse(Doctor &doc, int nurseID, const std::string &name, const std::stri
     node->shift = shift;
     node->next = nullptr;
 
+    //When the nurse list is initially empty i.e the nurse is the first one to be added
     if (doc.nurseHead == nullptr) {
         doc.nurseHead = node;
     } else {
+        //if not, move to the end of the linked list and add the new nurse
         Nurse* tail = doc.nurseHead;
         while (tail->next != nullptr) {
             tail = tail->next;

@@ -152,11 +152,12 @@ static void pauseForMenu() {
 }
 
 static void screenTitle(const std::string &title, bool showCancelHint) {
-    std::cout << "\n" << title << "\n";
+    std::cout << "\n+==========================================================+\n";
+    std::cout << "| " << fit(title, 56) << " |\n";
     if (showCancelHint) {
-        std::cout << "(type /c at any prompt to cancel)\n";
+        std::cout << ": " << fit("(type /c at any prompt to cancel)", 56) << " :\n";
     }
-    std::cout << "\n";
+    std::cout << "+==========================================================+\n\n";
 }
 
 // ===================================================================
@@ -169,71 +170,110 @@ static std::string levelLabel(int acuity) {
 }
 
 static void printPatient(const std::string &heading, const Patient &p) {
-    std::cout << heading << "\n";
-    std::cout << "Patient ID: " << p.patientID << "\n";
-    std::cout << "Name: " << p.name << "\n";
-    std::cout << "Acuity: " << p.acuityScore << " (" << levelLabel(p.acuityScore) << ")\n";
+    std::string acuityStr = std::to_string(p.acuityScore) + " (" + levelLabel(p.acuityScore) + ")";
+    std::cout << "+----------------------------------------------------------+\n";
+    std::cout << "| " << fit(heading, 56) << " |\n";
+    std::cout << "+==========================================================+\n";
+    std::cout << "| Patient ID : " << fit(std::to_string(p.patientID), 43) << " |\n";
+    std::cout << "| Name       : " << fit(p.name, 43) << " |\n";
+    std::cout << "| Acuity     : " << fit(acuityStr, 43) << " |\n";
+    std::cout << "+----------------------------------------------------------+\n";
 }
 
 static void showRoster(const Doctor roster[], int count) {
     if (count == 0) {
-        std::cout << "The doctor roster is empty.\n";
+        std::cout << "+-----------------------------------------------------------------+\n";
+        std::cout << "| The doctor roster is empty.                                     |\n";
+        std::cout << "+-----------------------------------------------------------------+\n";
         return;
     }
-    std::cout << fit("ID", 8) << fit("Name", 18) << fit("Specialization", 20) << "Nurses\n";
+    std::cout << "+----------+--------------------+----------------------+----------+\n";
+    std::cout << "| " << fit("ID", 8) << " | " << fit("Name", 18) << " | " << fit("Specialization", 20) << " | " << fit("Nurses", 8) << " |\n";
+    std::cout << "+==========+====================+======================+==========+\n";
     for (int i = 0; i < count; ++i) {
-        std::cout << fit(std::to_string(roster[i].doctorID), 8)
-                  << fit(roster[i].name, 18) << fit(roster[i].specialization, 20)
-                  << roster[i].nurseCount << "\n";
+        std::cout << "| " << fit(std::to_string(roster[i].doctorID), 8) << " | "
+                  << fit(roster[i].name, 18) << " | "
+                  << fit(roster[i].specialization, 20) << " | "
+                  << fit(std::to_string(roster[i].nurseCount), 8) << " |\n";
         for (const Nurse *n = roster[i].nurseHead; n != nullptr; n = n->next) {
-            std::cout << "    Nurse " << fit(std::to_string(n->nurseID), 6)
-                      << fit(n->name, 16) << n->shift << "\n";
+            std::cout << ":  +-- Nurse ID: " << fit(std::to_string(n->nurseID), 6)
+                      << " | Name: " << fit(n->name, 16)
+                      << " | Shift: " << fit(n->shift, 6) << "  :\n";
+        }
+        if (i < count - 1) {
+            std::cout << "+----------+--------------------+----------------------+----------+\n";
         }
     }
-    std::cout << count << " of " << MAX_DOCTORS << " doctor slots used\n";
+    std::cout << "+==========+====================+======================+==========+\n";
+    std::string statusStr = std::to_string(count) + " of " + std::to_string(MAX_DOCTORS) + " doctor slots used";
+    std::cout << "| Status: " << fit(statusStr, 54) << " |\n";
+    std::cout << "+-----------------------------------------------------------------+\n";
 }
 
 static void showQueue(const PriorityQueue *pq) {
     if (is_empty(pq)) {
-        std::cout << "The triage queue is empty.\n";
+        std::cout << "+-------------------------------------------------------------+\n";
+        std::cout << "| The triage queue is empty.                                  |\n";
+        std::cout << "+-------------------------------------------------------------+\n";
         return;
     }
-    std::cout << fit("Idx", 5) << fit("ID", 8) << fit("Name", 16) << fit("Acuity", 8) << "Level\n";
+    std::cout << "+-------+----------+------------------+----------+------------+\n";
+    std::cout << "| " << fit("Idx", 5) << " | " << fit("ID", 8) << " | " << fit("Name", 16) << " | " << fit("Acuity", 8) << " | " << fit("Level", 10) << " |\n";
+    std::cout << "+=======+==========+==================+==========+============+\n";
     for (int i = 0; i < pq->patientCount; ++i) {
         const Patient &p = pq->patientHeap[i];
-        std::cout << fit(std::to_string(i), 5) << fit(std::to_string(p.patientID), 8)
-                  << fit(p.name, 16) << fit(std::to_string(p.acuityScore), 8)
-                  << levelLabel(p.acuityScore) << "\n";
+        std::cout << "| " << fit(std::to_string(i), 5) << " | "
+                  << fit(std::to_string(p.patientID), 8) << " | "
+                  << fit(p.name, 16) << " | "
+                  << fit(std::to_string(p.acuityScore), 8) << " | "
+                  << fit(levelLabel(p.acuityScore), 10) << " |\n";
+        if (i < pq->patientCount - 1) {
+            std::cout << "+-------+----------+------------------+----------+------------+\n";
+        }
     }
-    std::cout << pq->patientCount << " of " << MAX_PATIENTS << " patients waiting\n";
+    std::cout << "+=======+==========+==================+==========+============+\n";
+    std::string statusStr = std::to_string(pq->patientCount) + " of " + std::to_string(MAX_PATIENTS) + " patients waiting";
+    std::cout << "| Status: " << fit(statusStr, 50) << " |\n";
+    std::cout << "+-------------------------------------------------------------+\n";
 }
 
 void displayMenu(int doctorCount, const PriorityQueue *pq) {
-    std::cout << "\nKigali Central Hospital - PMTS (Phase 1)\n";
-    std::cout << "Doctors: " << doctorCount << "/" << MAX_DOCTORS
-              << "  Patients waiting: " << pq->patientCount << "/" << MAX_PATIENTS << "\n\n";
-    std::cout << "Staff Management\n";
-    std::cout << " 1. Add Doctor\n";
-    std::cout << " 2. Remove Doctor\n";
-    std::cout << " 3. Add Nurse to Doctor\n";
-    std::cout << " 4. Remove Nurse from Doctor\n";
-    std::cout << " 5. Display Doctor Roster\n\n";
-    std::cout << "Emergency Room Triage\n";
-    std::cout << " 6. Insert Triage Patient\n";
-    std::cout << " 7. Extract Most Urgent Patient\n";
-    std::cout << " 8. Peek Highest Acuity Patient\n";
-    std::cout << " 9. Display Triage Priority Queue\n\n";
-    std::cout << "10. Exit System\n\n";
+    std::string statusStr = "Doctors: " + std::to_string(doctorCount) + "/" + std::to_string(MAX_DOCTORS) +
+                            " | Patients waiting: " + std::to_string(pq->patientCount) + "/" + std::to_string(MAX_PATIENTS);
+
+    std::cout << "\n+==========================================================+\n";
+    std::cout << "| Kigali Central Hospital - PMTS (Phase 1)                 |\n";
+    std::cout << ": " << fit(statusStr, 56) << " :\n";
+    std::cout << "+==========================================================+\n";
+    std::cout << ": -- Staff Management --                                   :\n";
+    std::cout << "|  1. Add Doctor                                           |\n";
+    std::cout << "|  2. Remove Doctor                                        |\n";
+    std::cout << "|  3. Add Nurse to Doctor                                  |\n";
+    std::cout << "|  4. Remove Nurse from Doctor                             |\n";
+    std::cout << "|  5. Display Doctor Roster                                |\n";
+    std::cout << "+----------------------------------------------------------+\n";
+    std::cout << ": -- Emergency Room Triage --                              :\n";
+    std::cout << "|  6. Insert Triage Patient                                |\n";
+    std::cout << "|  7. Extract Most Urgent Patient                          |\n";
+    std::cout << "|  8. Peek Highest Acuity Patient                          |\n";
+    std::cout << "|  9. Display Triage Priority Queue                        |\n";
+    std::cout << "+----------------------------------------------------------+\n";
+    std::cout << "| 10. Exit System                                          |\n";
+    std::cout << "+==========================================================+\n\n";
 }
 
 // ===================================================================
 //  main
 // ===================================================================
 int main() {
-    std::cout << "Kigali Central Hospital - PMTS (Phase 1 Driver)\n\n";
+    std::cout << "+==========================================================+\n";
+    std::cout << "| Kigali Central Hospital - PMTS (Phase 1 Driver)          |\n";
+    std::cout << "+==========================================================+\n\n";
 
     // --- Module 1: Staff Management Demo ---
-    std::cout << "1. STAFF MANAGEMENT MODULE DEMO\n";
+    std::cout << "+----------------------------------------------------------+\n";
+    std::cout << ": 1. STAFF MANAGEMENT MODULE DEMO                          :\n";
+    std::cout << "+----------------------------------------------------------+\n";
     Doctor demoRoster[MAX_DOCTORS];
     int demoDoctorCount = 0;
 
@@ -261,7 +301,9 @@ int main() {
     demoDoctorCount = 0;
 
     // --- Module 2: Emergency Room Triage Engine Demo ---
-    std::cout << "\n2. EMERGENCY ROOM TRIAGE ENGINE DEMO\n";
+    std::cout << "\n+----------------------------------------------------------+\n";
+    std::cout << ": 2. EMERGENCY ROOM TRIAGE ENGINE DEMO                     :\n";
+    std::cout << "+----------------------------------------------------------+\n";
     PriorityQueue demoPQ;
     demoPQ.patientCount = 0;
 

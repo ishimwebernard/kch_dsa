@@ -1,7 +1,7 @@
 #include "../include/module2_triage.h"
 #include <iostream>
 
-// Helper swap function (no STL <algorithm> / std::swap)
+// Helper swap function
 static void swap_patients(Patient& a, Patient& b) {
     Patient temp = a;
     a = b;

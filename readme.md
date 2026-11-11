@@ -10,6 +10,15 @@ Kigali Central Hospital (KCH) PMTS Phase 1 backend architecture implemented in s
 ## Building and Running
 
 ### Compilation
-Build the main application binary (`kch_phase1`):
+To build the main application binary (`kch_phase1`), go to the root directory of the project and run:
 ```bash
-make
+make all
+```
+To run the tests, navigate to the root directory and run:
+```bash
+make tests
+```
+To clean the app build and the executable, run:
+```bash
+make clean
+```

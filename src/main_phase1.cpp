@@ -539,7 +539,11 @@ int main() {
             }
             case 12:
                 screenTitle("DAILY SCHEDULE", false);
-                print_schedule_inorder(appointmentRoot);
+                if (appointmentRoot == nullptr) {
+                    std::cout << "No appointments booked.\n";
+                } else {
+                    print_schedule_inorder(appointmentRoot);
+                }
                 break;
 
             case 13:

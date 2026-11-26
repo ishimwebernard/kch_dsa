@@ -4,8 +4,8 @@
 #include <iostream>
 
 struct AppointmentNode {
-    int appointmentTime;   // Key: 24-hr timestamp (e.g., 0800, 1030)
-    int patientID;         // Patient National ID
+    int appointmentTime;  
+    int patientID;        
     AppointmentNode* left;
     AppointmentNode* right;
 
@@ -13,7 +13,7 @@ struct AppointmentNode {
         : appointmentTime(time), patientID(id), left(nullptr), right(nullptr) {}
 };
 
-// BST Core Operations
+// core operation functions
 AppointmentNode* insert_appointment(AppointmentNode* root, int appointmentTime, int patientID);
 bool search_appointment(AppointmentNode* root, int appointmentTime);
 

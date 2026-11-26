@@ -2,6 +2,7 @@
 #include <string>
 #include "../include/module1_staff.h"
 #include "../include/module2_triage.h"
+#include "../include/module3_appointments.h"
 
 static const int ID_MAX = 1000000000;
 
@@ -258,7 +259,12 @@ void displayMenu(int doctorCount, const PriorityQueue *pq) {
     std::cout << "|  8. Peek Highest Acuity Patient                          |\n";
     std::cout << "|  9. Display Triage Priority Queue                        |\n";
     std::cout << "+----------------------------------------------------------+\n";
-    std::cout << "| 10. Exit System                                          |\n";
+    std::cout << ": -- Outpatient Appointments --                            :\n";
+    std::cout << "| 10. Book Appointment                                     |\n";
+    std::cout << "| 11. Search Appointment Slot                              |\n";
+    std::cout << "| 12. Display Daily Schedule                               |\n";
+    std::cout << "+----------------------------------------------------------+\n";
+    std::cout << "| 13. Exit System                                          |\n";
     std::cout << "+==========================================================+\n\n";
 }
 
@@ -340,12 +346,13 @@ int main() {
     int doctorCount = 0;
     PriorityQueue triageQueue;
     triageQueue.patientCount = 0;
+    AppointmentNode* appointmentRoot = nullptr;
 
     int choice = -1;
-    while (choice != 10 && !g_eof) {
+    while (choice != 13 && !g_eof) {
         displayMenu(doctorCount, &triageQueue);
 
-        if (!readInt("Enter choice (1-10):", choice, 1, 10)) {
+        if (!readInt("Enter choice (1-13):", choice, 1, 13)) {
             if (g_cancel) {  // /c on the main menu simply redraws it
                 g_cancel = false;
                 choice = -1;
@@ -511,7 +518,35 @@ int main() {
                 showQueue(&triageQueue);
                 break;
 
-            case 10:
+            case 10: {
+                screenTitle("BOOK APPOINTMENT", true);
+                int time, pid;
+                if (!readInt("Appointment time (HHMM, e.g. 0915):", time, 0, 2359)) break;
+                if (!readInt("Patient ID:", pid, 1, ID_MAX)) break;
+                appointmentRoot = insert_appointment(appointmentRoot, time, pid);
+                break;
+            }
+            case 11: {
+                screenTitle("SEARCH APPOINTMENT SLOT", true);
+                int time;
+                if (!readInt("Appointment time (HHMM):", time, 0, 2359)) break;
+                if (search_appointment(appointmentRoot, time)) {
+                    std::cout << "Slot " << time << " is booked.\n";
+                } else {
+                    std::cout << "Slot " << time << " is free.\n";
+                }
+                break;
+            }
+            case 12:
+                screenTitle("DAILY SCHEDULE", false);
+                if (appointmentRoot == nullptr) {
+                    std::cout << "No appointments booked.\n";
+                } else {
+                    print_schedule_inorder(appointmentRoot);
+                }
+                break;
+
+            case 13:
                 std::cout << "Cleaning dynamic memory and exiting...\n";
                 break;
         }
@@ -521,16 +556,18 @@ int main() {
             std::cout << "Action cancelled. Nothing was changed.\n";
         }
 
-        if (choice != 10 && !g_eof) {
+        if (choice != 13 && !g_eof) {
             pauseForMenu();
         }
     }
 
-    // Always release nurse lists, whether the user chose 10 or the input ended.
+    // Always release nurse lists, whether the user chose 13 or the input ended.
     for (int i = 0; i < doctorCount; ++i) {
         freeNurseList(doctorRoster[i].nurseHead);
     }
     doctorCount = 0;
+    free_appointments(appointmentRoot);
+    appointmentRoot = nullptr;
     std::cout << "Shutdown complete.\n";
 
     return 0;

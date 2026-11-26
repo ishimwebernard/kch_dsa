@@ -5,7 +5,7 @@ SRC_DIR = src
 TEST_DIR = tests
 BUILD_DIR = build
 
-OBJS = $(BUILD_DIR)/module1_staff.o $(BUILD_DIR)/module2_triage.o
+OBJS = $(BUILD_DIR)/module1_staff.o $(BUILD_DIR)/module2_triage.o $(BUILD_DIR)/module3_appointments.o
 
 TARGET = kch_phase1
 TEST_TARGET = test_runner
@@ -20,6 +20,9 @@ $(BUILD_DIR)/module1_staff.o: $(SRC_DIR)/module1_staff.cpp include/module1_staff
 
 $(BUILD_DIR)/module2_triage.o: $(SRC_DIR)/module2_triage.cpp include/module2_triage.h | $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) -c $(SRC_DIR)/module2_triage.cpp -o $(BUILD_DIR)/module2_triage.o
+
+$(BUILD_DIR)/module3_appointments.o: $(SRC_DIR)/module3_appointments.cpp include/module3_appointments.h | $(BUILD_DIR)
+	$(CXX) $(CXXFLAGS) -c $(SRC_DIR)/module3_appointments.cpp -o $(BUILD_DIR)/module3_appointments.o
 
 $(TARGET): $(OBJS) $(SRC_DIR)/main_phase1.cpp | $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) $(OBJS) $(SRC_DIR)/main_phase1.cpp -o $(TARGET)

@@ -9,7 +9,6 @@ constexpr int EMPTY_SLOT = -1;         // sentinel for an unused slot in the key
 
 // ---------------------------------------------------------------
 // Q4.1 / Q4.3: Key generation, modulo hash and linear probing
-// (original logic by Gerald, module4/HashTable.*, merged here)
 // ---------------------------------------------------------------
 bool is_valid_citizen_id(const std::string &citizenID);       // 8 digits + 1 letter
 int  generate_key(const std::string &citizenID);              // sum of ASCII codes
